@@ -22,6 +22,7 @@
 
 #include <ewig/coord.hpp>
 
+#include <type_traits_>
 #include <lager/store.hpp>
 #include <lager/debug/cereal/struct.hpp>
 

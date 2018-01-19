@@ -20,9 +20,9 @@
 
 #include "ewig/terminal.hpp"
 #include "ewig/draw.hpp"
+#include "ewig/eventloop.hpp"
 
 #include <lager/store.hpp>
-#include <lager/event_loop/boost_asio.hpp>
 
 #include <iostream>
 
@@ -115,13 +115,13 @@ void run(int argc, const char** argv, const std::string& fname)
 #else
     auto enhancer = lager::identity;
 #endif
-    auto serv = boost::asio::io_service{};
+    auto serv = asio::io_context{};
     auto term = terminal{serv};
     auto st   = lager::make_store<action>(
         application{term.size(), key_map_emacs},
         update,
         draw,
-        lager::boost_asio_event_loop{serv, [&] { term.stop(); }},
+        lager::with_asio_event_loop{serv, [&] { term.stop(); }},
         enhancer);
     term.start([&] (auto ev) { st.dispatch (ev); });
     st.dispatch(command_action{"load", fname});

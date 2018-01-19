@@ -21,7 +21,7 @@
 #include "ewig/terminal.hpp"
 #include "ewig/draw.hpp"
 
-#include <boost/asio/read.hpp>
+#include <asio/read.hpp>
 
 #include <iostream>
 
@@ -34,7 +34,7 @@ using namespace std::string_literals;
 
 namespace ewig {
 
-terminal::terminal(boost::asio::io_service& serv)
+terminal::terminal(asio::io_context& serv)
     : win_{::initscr()}
     , input_{serv, ::dup(STDIN_FILENO)}
     , signal_{serv, SIGWINCH}
@@ -94,7 +94,7 @@ void terminal::next_resize_()
 
 void terminal::next_key_()
 {
-    using namespace boost::asio;
+    using namespace asio;
     input_.async_read_some(null_buffers(), [&] (auto ec, auto) {
         if (!ec) {
             auto key = wint_t{};

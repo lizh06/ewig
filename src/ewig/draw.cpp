@@ -85,7 +85,7 @@ void draw_text(const buffer& buf, coord size)
                                              (index)buf.content.size());
     auto [starts, ends] = display_selected_region(buf);
 
-    immer::for_each(first_ln, last_ln, [&] (auto ln) {
+    immer::for_each(first_ln, last_ln, [&, starts=starts, ends=ends] (auto ln) {
         str.clear();
         display_line_fill(ln, buf.scroll.col + col, 2*size.col, str);
         ::move(row, col);
